@@ -1,4 +1,4 @@
-package io.github.uptalent.notification;
+package io.github.uptalent;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
