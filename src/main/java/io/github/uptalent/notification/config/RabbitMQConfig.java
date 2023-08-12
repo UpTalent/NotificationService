@@ -11,29 +11,46 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class RabbitMQConfig {
-    @Value("${rabbitmq.queue.name}")
-    private String queueName;
-    @Value("${rabbitmq.exchange.name}")
-    private String exchangeName;
-    @Value("${rabbitmq.routing-key.name}")
-    private String routingKeyName;
+    @Value("${rabbitmq.queue.verify}")
+    private String queueVerify;
+    @Value("${rabbitmq.queue.change.password}")
+    private String queueChangePassword;
+    @Value("${rabbitmq.exchange}")
+    private String exchange;
+    @Value("${rabbitmq.routing-key.verify}")
+    private String routingKeyVerify;
+    @Value("${rabbitmq.routing-key.change.password}")
+    private String routingKeyChangePassword;
 
     @Bean
-    public Queue queue() {
-        return new Queue(queueName);
+    public Queue queueVerify() {
+        return new Queue(queueVerify);
+    }
+
+    @Bean
+    public Queue queueChangePassword() {
+        return new Queue(queueChangePassword);
     }
 
     @Bean
     public TopicExchange exchange() {
-        return new TopicExchange(exchangeName);
+        return new TopicExchange(exchange);
     }
 
     @Bean
-    public Binding binding() {
+    public Binding bindingVerify() {
         return BindingBuilder
-                .bind(queue())
+                .bind(queueVerify())
                 .to(exchange())
-                .with(routingKeyName);
+                .with(routingKeyVerify);
+    }
+
+    @Bean
+    public Binding bindingChangePassword() {
+        return BindingBuilder
+                .bind(queueVerify())
+                .to(exchange())
+                .with(routingKeyChangePassword);
     }
 
     @Bean
