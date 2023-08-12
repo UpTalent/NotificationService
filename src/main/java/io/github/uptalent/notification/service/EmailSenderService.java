@@ -1,6 +1,6 @@
 package io.github.uptalent.notification.service;
 
-import io.github.uptalent.notification.model.SendEmailMessage;
+import io.github.uptalent.notification.model.common.EmailMessage;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +22,7 @@ public class EmailSenderService {
     private final JavaMailSender javaMailSender;
 
     @Async
-    public void sendEmail(SendEmailMessage request) {
+    public void sendEmail(EmailMessage request) {
         if (Objects.isNull(request))
             return;
 
