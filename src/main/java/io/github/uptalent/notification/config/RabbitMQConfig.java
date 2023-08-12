@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class RabbitMQConfig {
+
     @Value("${rabbitmq.queue.verify}")
     private String queueVerify;
     @Value("${rabbitmq.queue.change.password}")
