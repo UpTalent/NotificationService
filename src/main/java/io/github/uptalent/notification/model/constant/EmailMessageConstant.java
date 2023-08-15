@@ -1,6 +1,8 @@
 package io.github.uptalent.notification.model.constant;
 
 public class EmailMessageConstant {
+    public static final String DEFAULT_SUBJECT = "Default subject";
+    public static final String DEFAULT_MESSAGE = "Default message";
     public static final String SUBJECT_RESTORE = "Your UpTalent account was temporary deleted";
     public static final String SUBJECT_VERIFY = "Your UPTalent account not activated";
     public static final String SUBJECT_CHANGE_PASSWORD = "Your UPTalent account has request to change password";

@@ -6,8 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Service;
 
-import static io.github.uptalent.notification.model.constant.EmailMessageLinkType.CHANGE_PASSWORD;
-import static io.github.uptalent.notification.model.constant.EmailMessageLinkType.VERIFY;
+import static io.github.uptalent.notification.model.constant.EmailMessageLinkType.*;
 
 @Service
 @RequiredArgsConstructor
@@ -27,6 +26,13 @@ public class EmailConsumerService {
     public void consumeVerifyMessage(EmailMessageDetailInfo emailMessageDetailInfo) {
         EmailMessage emailMessage = emailMessageGeneratorService
                 .generateEmailMessage(emailMessageDetailInfo, VERIFY);
+        emailSenderService.sendEmail(emailMessage);
+    }
+
+    @RabbitListener(queues = {"${rabbitmq.queue.restore-account}"})
+    public void consumeRestoreAccountMessage(EmailMessageDetailInfo emailMessageDetailInfo) {
+        EmailMessage emailMessage = emailMessageGeneratorService
+                .generateEmailMessage(emailMessageDetailInfo, RESTORE);
         emailSenderService.sendEmail(emailMessage);
     }
 }

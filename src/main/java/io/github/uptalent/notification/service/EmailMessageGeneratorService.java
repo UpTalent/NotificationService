@@ -16,8 +16,6 @@ import static io.github.uptalent.notification.model.constant.EmailMessageConstan
 @RequiredArgsConstructor
 public class EmailMessageGeneratorService {
     private static final String TOKEN_PARAMETER = "?token=";
-    private static final String DEFAULT_SUBJECT = "Default subject";
-    private static final String DEFAULT_MESSAGE = "Default message";
 
     @Value("${client.url}")
     private String clientUrl;
@@ -54,35 +52,28 @@ public class EmailMessageGeneratorService {
     }
 
     private String getEmailSubjectByMessageLinkType(EmailMessageLinkType messageLinkType) {
-        switch (messageLinkType) {
-            case CHANGE_PASSWORD -> {
-                return SUBJECT_CHANGE_PASSWORD;
-            }
-            case VERIFY -> {
-                return SUBJECT_VERIFY;
-            }
-            case RESTORE -> {
-                return SUBJECT_RESTORE;
-            }
-            default -> {
-                return DEFAULT_SUBJECT;
-            }
-        }
+        return getString(messageLinkType, SUBJECT_CHANGE_PASSWORD, SUBJECT_VERIFY, SUBJECT_RESTORE, DEFAULT_SUBJECT);
     }
 
     private String getEmailMessageByMessageLinkType(EmailMessageLinkType messageLinkType) {
+        return getString(messageLinkType, MESSAGE_CHANGE_PASSWORD, MESSAGE_VERIFY, MESSAGE_RESTORE, DEFAULT_MESSAGE);
+    }
+
+    private String getString(EmailMessageLinkType messageLinkType,
+                             String changePassword, String verify,
+                             String restore, String defaultStr) {
         switch (messageLinkType) {
             case CHANGE_PASSWORD -> {
-                return MESSAGE_CHANGE_PASSWORD;
+                return changePassword;
             }
             case VERIFY -> {
-                return MESSAGE_VERIFY;
+                return verify;
             }
             case RESTORE -> {
-                return MESSAGE_RESTORE;
+                return restore;
             }
             default -> {
-                return DEFAULT_MESSAGE;
+                return defaultStr;
             }
         }
     }
