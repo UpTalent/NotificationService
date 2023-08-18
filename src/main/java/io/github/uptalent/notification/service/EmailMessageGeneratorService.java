@@ -26,18 +26,17 @@ public class EmailMessageGeneratorService {
                 messageInfo.getExpiredDateTime(),
                 link,
                 messageLinkType);
-        String subject = getEmailSubjectByMessageLinkType(messageLinkType);
+        String subject = messageLinkType.getSubject();
         String email = messageInfo.getEmail();
 
         return new EmailMessage(email, subject, message);
     }
 
-
     private String generateLetter(String username,
                                   LocalDateTime expiredDateTime,
                                   String link,
                                   EmailMessageLinkType messageType) {
-        String messageBody = getEmailMessageByMessageLinkType(messageType);
+        String messageBody = messageType.getMessageBody();
 
         return MESSAGE_HEADER +
                 messageBody.formatted(username, expiredDateTime.format(DateTimeFormatter.ISO_LOCAL_DATE), link) +
@@ -49,32 +48,5 @@ public class EmailMessageGeneratorService {
                 messageType.getUrl() +
                 TOKEN_PARAMETER +
                 uuid;
-    }
-
-    private String getEmailSubjectByMessageLinkType(EmailMessageLinkType messageLinkType) {
-        return getString(messageLinkType, SUBJECT_CHANGE_PASSWORD, SUBJECT_VERIFY, SUBJECT_RESTORE, DEFAULT_SUBJECT);
-    }
-
-    private String getEmailMessageByMessageLinkType(EmailMessageLinkType messageLinkType) {
-        return getString(messageLinkType, MESSAGE_CHANGE_PASSWORD, MESSAGE_VERIFY, MESSAGE_RESTORE, DEFAULT_MESSAGE);
-    }
-
-    private String getString(EmailMessageLinkType messageLinkType,
-                             String changePassword, String verify,
-                             String restore, String defaultStr) {
-        switch (messageLinkType) {
-            case CHANGE_PASSWORD -> {
-                return changePassword;
-            }
-            case VERIFY -> {
-                return verify;
-            }
-            case RESTORE -> {
-                return restore;
-            }
-            default -> {
-                return defaultStr;
-            }
-        }
     }
 }
