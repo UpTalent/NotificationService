@@ -23,6 +23,9 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Value("${spring.rabbitmq.password}")
     private String password;
 
+    @Value("${spring.rabbitmq.virtual-host}")
+    private String virtualhost;
+
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint(REGISTRY)
@@ -36,7 +39,8 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                 .setClientLogin(username)
                 .setClientPasscode(password)
                 .setSystemLogin(username)
-                .setSystemPasscode(password);
+                .setSystemPasscode(password)
+                .setVirtualHost(virtualhost);
 
         config.setApplicationDestinationPrefixes(APP_DESTINATION_PREFIX);
     }
