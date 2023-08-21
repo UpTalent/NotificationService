@@ -25,7 +25,11 @@ public class MessageQueueConfig {
     @Value("${rabbitmq.queue.restore-account}")
     private String restoreAccountQueue;
     @Value("${rabbitmq.routing-key.restore-account}")
-    private String restoreAccountRoutingKey;
+    private String restoreAccountRoutingKey;@Value("${rabbitmq.queue.event_notification}")
+    private String eventNotificationQueue;
+    @Value("${rabbitmq.routing-key.event_notification}")
+    private String eventNotificationRoutingKey;
+
 
     @Bean
     public Queue queueVerify() {
@@ -40,6 +44,11 @@ public class MessageQueueConfig {
     @Bean
     public Queue restoreAccountQueue() {
         return new Queue(restoreAccountQueue);
+    }
+
+    @Bean
+    public Queue eventNotificationQueue() {
+        return new Queue(eventNotificationQueue);
     }
 
     @Bean
@@ -69,6 +78,14 @@ public class MessageQueueConfig {
                 .bind(restoreAccountQueue())
                 .to(exchange())
                 .with(restoreAccountRoutingKey);
+    }
+
+    @Bean
+    public Binding eventNotificationBinding() {
+        return BindingBuilder
+                .bind(eventNotificationQueue())
+                .to(exchange())
+                .with(eventNotificationRoutingKey);
     }
 
     @Bean
