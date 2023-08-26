@@ -1,18 +1,14 @@
 package io.github.uptalent.notification.service;
 
-import io.github.uptalent.notification.model.common.EventNotificationMessage;
 import io.github.uptalent.notification.model.hash.EventNotification;
 import io.github.uptalent.notification.repository.EventNotificationRepository;
+import io.github.uptalent.starter.model.common.EventNotificationMessage;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.redis.core.ListOperations;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import static io.github.uptalent.notification.ws.EventNotificationWebSocketController.SEND_NOTIFICATION_TO_USER;

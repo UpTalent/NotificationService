@@ -1,11 +1,9 @@
 package io.github.uptalent.notification.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import org.springframework.amqp.core.*;
-import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
-import org.springframework.amqp.support.converter.MessageConverter;
+import org.springframework.amqp.core.Binding;
+import org.springframework.amqp.core.BindingBuilder;
+import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.core.TopicExchange;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,74 +23,89 @@ public class MessageQueueConfig {
     @Value("${rabbitmq.queue.restore-account}")
     private String restoreAccountQueue;
     @Value("${rabbitmq.routing-key.restore-account}")
-    private String restoreAccountRoutingKey;@Value("${rabbitmq.queue.event_notification}")
+    private String restoreAccountRoutingKey;
+    @Value("${rabbitmq.queue.event_notification}")
     private String eventNotificationQueue;
     @Value("${rabbitmq.routing-key.event_notification}")
     private String eventNotificationRoutingKey;
-
-
-    @Bean
-    public Queue queueVerify() {
-        return new Queue(verifyAccountQueue);
-    }
-
-    @Bean
-    public Queue queueChangePassword() {
-        return new Queue(changePasswordQueue);
-    }
-
-    @Bean
-    public Queue restoreAccountQueue() {
-        return new Queue(restoreAccountQueue);
-    }
-
-    @Bean
-    public Queue eventNotificationQueue() {
-        return new Queue(eventNotificationQueue);
-    }
+    @Value("${rabbitmq.queue.blocked-account}")
+    private String blockedAccountQueue;
+    @Value("${rabbitmq.routing-key.blocked-account}")
+    private String blockedAccountRoutingKey;
+    @Value("${rabbitmq.routing-key.unblocked-account}")
+    private String unblockedAccountRoutingKey;
+    @Value("${rabbitmq.queue.unblocked-account}")
+    private String unblockedAccountQueue;
 
     @Bean
     public TopicExchange exchange() {
         return new TopicExchange(exchange);
     }
 
+    public Queue createQueue(String queueName) {
+        return new Queue(queueName);
+    }
+
+    public Binding createBinding(Queue queue, String routingKey){
+        return BindingBuilder.bind(queue).to(exchange()).with(routingKey);
+    }
     @Bean
-    public Binding bindingVerify() {
-        return BindingBuilder
-                .bind(queueVerify())
-                .to(exchange())
-                .with(verifyAccountRoutingKey);
+    public Queue changePasswordQueue() {
+        return createQueue(changePasswordQueue);
     }
 
     @Bean
-    public Binding bindingChangePassword() {
-        return BindingBuilder
-                .bind(queueVerify())
-                .to(exchange())
-                .with(changePasswordRoutingKey);
+    public Queue restoreAccountQueue() {
+        return createQueue(restoreAccountQueue);
+    }
+
+    @Bean
+    public Queue queueVerify() {
+        return createQueue(verifyAccountQueue);
+    }
+
+    @Bean
+    public Queue eventNotificationQueue() {
+        return createQueue(eventNotificationQueue);
+    }
+
+    @Bean
+    public Queue blockedAccountQueue() {
+        return createQueue(blockedAccountQueue);
+    }
+
+    @Bean
+    public Queue unblockedAccountQueue() {
+        return createQueue(unblockedAccountQueue);
+    }
+
+    @Bean
+    public Binding changePasswordBinding() {
+        return createBinding(changePasswordQueue(), changePasswordRoutingKey);
     }
 
     @Bean
     public Binding restoreAccountBinding() {
-        return BindingBuilder
-                .bind(restoreAccountQueue())
-                .to(exchange())
-                .with(restoreAccountRoutingKey);
+        return createBinding(restoreAccountQueue(), restoreAccountRoutingKey);
+    }
+
+    @Bean
+    public Binding verifyAccountBinding() {
+        return createBinding(queueVerify(), verifyAccountRoutingKey);
     }
 
     @Bean
     public Binding eventNotificationBinding() {
-        return BindingBuilder
-                .bind(eventNotificationQueue())
-                .to(exchange())
-                .with(eventNotificationRoutingKey);
+        return createBinding(eventNotificationQueue(), eventNotificationRoutingKey);
     }
 
     @Bean
-    public MessageConverter messageConverter() {
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new JavaTimeModule());
-        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-        return new Jackson2JsonMessageConverter(mapper);
+    public Binding blockedAccountBinding() {
+        return createBinding(blockedAccountQueue(), blockedAccountRoutingKey);
+    }
+
+    @Bean
+    public Binding unblockedAccountBinding() {
+        return createBinding(unblockedAccountQueue(), unblockedAccountRoutingKey);
     }
 }

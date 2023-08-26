@@ -1,8 +1,9 @@
 package io.github.uptalent.notification.service;
 
-import io.github.uptalent.notification.model.common.EmailMessageDetailInfo;
 import io.github.uptalent.notification.model.constant.EmailMessageLinkType;
 import io.github.uptalent.notification.model.common.EmailMessage;
+import io.github.uptalent.starter.model.common.EmailMessageDetailInfo;
+import io.github.uptalent.starter.model.common.EmailMessageGeneralInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -32,6 +33,14 @@ public class EmailMessageGeneratorService {
         return new EmailMessage(email, subject, message);
     }
 
+    public EmailMessage generateEmailMessage(EmailMessageGeneralInfo messageInfo, EmailMessageLinkType messageLinkType) {
+        String message = generateLetter(messageInfo.getUsername(), messageLinkType);
+        String subject = messageLinkType.getSubject();
+        String email = messageInfo.getEmail();
+
+        return new EmailMessage(email, subject, message);
+    }
+
     private String generateLetter(String username,
                                   LocalDateTime expiredDateTime,
                                   String link,
@@ -41,6 +50,13 @@ public class EmailMessageGeneratorService {
         return MESSAGE_HEADER +
                 messageBody.formatted(username, expiredDateTime.format(DateTimeFormatter.ISO_LOCAL_DATE), link) +
                 MESSAGE_FOOTER;
+    }
+
+    private String generateLetter(String username,
+                                  EmailMessageLinkType messageType) {
+        String messageBody = messageType.getMessageBody();
+
+        return MESSAGE_HEADER + messageBody.formatted(username) + MESSAGE_FOOTER;
     }
 
     private String generateLink(String uuid, EmailMessageLinkType messageType) {
