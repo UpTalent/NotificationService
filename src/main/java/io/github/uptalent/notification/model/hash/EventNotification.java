@@ -1,7 +1,7 @@
 package io.github.uptalent.notification.model.hash;
 
 
-import io.github.uptalent.notification.model.common.Author;
+import io.github.uptalent.starter.model.common.Author;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

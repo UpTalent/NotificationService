@@ -1,6 +1,6 @@
 package io.github.uptalent.notification.service;
 
-import io.github.uptalent.notification.model.common.EventNotificationMessage;
+import io.github.uptalent.starter.model.common.EventNotificationMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Service;

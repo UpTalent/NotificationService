@@ -7,7 +7,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum EmailMessageLinkType {
     VERIFY("/verify",
-            "Your UPTalent account not activated",
+            "Your UpTalent account not activated",
             """
                         Verify your account
                         </h1>
@@ -67,7 +67,7 @@ public enum EmailMessageLinkType {
                         </a>
                 """),
     CHANGE_PASSWORD("/password/change",
-            "Your UPTalent account has request to change password",
+            "Your UpTalent account has request to change password",
             """
                     Change password of your account
                         </h1>
@@ -92,7 +92,39 @@ public enum EmailMessageLinkType {
                             Change password of your account
                         </button>
                         </a>
-                """);
+                """),
+
+    BLOCK_ACCOUNT("",
+            "Your UpTalent account has been blocked",
+            """
+                        Account Blocked
+                        </h1>
+                        <h3 style="margin: 10px 0;">
+                            Dear %s,
+                        </h3>
+                        <p>
+                            Your account has been blocked due to policy violations or suspicious activity.
+                        </p>
+                        <p>
+                            If you think this is a mistake, please contact the administrator.
+                        </p>
+                    """),
+
+    UNBLOCK_ACCOUNT("",
+            "Your UpTalent account has been unblocked",
+            """
+                    Account Unblocked
+                        </h1>
+                        <h3 style="margin: 10px 0;">
+                            Dear %s,
+                        </h3>
+                        <p>
+                            Your account has been unblocked after previous suspension. Please follow all guidelines to avoid repeat violations.
+                        </p>
+                        <p>\
+                            In case of any trouble, please do not hesitate to contact our support team.
+                        </p>
+                    """);
 
     private final String url;
     private final String subject;
